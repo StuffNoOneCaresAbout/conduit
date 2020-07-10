@@ -33,7 +33,7 @@ use ruma::{
             keys::{self, claim_keys, get_keys, upload_keys},
             media::{create_content, get_content, get_content_thumbnail, get_media_config},
             membership::{
-                ban_user, forget_room, get_member_events, invite_user, join_room_by_id,
+                ban_user, forget_room, get_member_events, invite_user, joined_members, join_room_by_id,
                 join_room_by_id_or_alias, kick_user, leave_room, unban_user,
             },
             message::{create_message_event, get_message_events},
@@ -1661,6 +1661,31 @@ pub fn kick_user_route(
     )?;
 
     Ok(kick_user::Response.into())
+}
+
+#[get("/_matrix/client/r0/rooms/<_room_id>/joined_members", data = "<body>")]
+pub fn joined_members_route(
+    db: State<'_, Database>,
+    body: Ruma<joined_members::Request>,
+    _room_id: String,
+) -> ConduitResult<joined_members::Response> {
+    const ERR_403 : Error = Error::BadRequest(ErrorKind::Forbidden, "You aren't a member of the room.");
+    if let Some(user_id) = &body.user_id {
+        if !db.rooms.is_joined(&user_id, &body.room_id).unwrap_or(false) {
+            return Err(ERR_403);
+        }
+    } else {
+        return Err(ERR_403);
+    }
+    let mut joined = BTreeMap::new();
+    for user_id in  db.rooms.room_members(&body.room_id) {
+        let user_id = user_id?;
+        let display_name = db.users.displayname(&user_id)?;
+        let avatar_url = db.users.avatar_url(&user_id)?;
+        joined.insert(user_id, joined_members::RoomMember { display_name, avatar_url});
+    }
+
+    Ok(joined_members::Response { joined }.into())
 }
 
 #[post("/_matrix/client/r0/rooms/<_room_id>/ban", data = "<body>")]

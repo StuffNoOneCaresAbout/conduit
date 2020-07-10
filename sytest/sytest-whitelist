@@ -66,3 +66,5 @@ User in dir while user still shares private rooms
 POST /rooms/:room_id/ban can ban a user
 Alternative server names do not cause a routing loop
 Can logout all devices
+/joined_members return joined members
+GET /rooms/:room_id/joined_members fetches my membership
