@@ -14,7 +14,7 @@ See it in action: <https://www.youtube.com/watch?v=HoBslDtqC1k>
 
 #### Can I try it out?
 
-Yes! Just open Element (<https://app.element.io> or Element Android for example) and register on the `https://conduit.koesters.xyz` homeserver.
+Yes! Just open a Matrix client (<https://app.element.io> or Element Android for example) and register on the `https://conduit.koesters.xyz` homeserver.
 
 #### How can I deploy my own?
 
