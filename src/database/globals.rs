@@ -1,4 +1,5 @@
 use crate::{utils, Error, Result};
+use std::convert::TryFrom;
 
 pub const COUNTER: &str = "c";
 
@@ -8,6 +9,7 @@ pub struct Globals {
     reqwest_client: reqwest::Client,
     server_name: String,
     registration_disabled: bool,
+    max_request_size: u32,
 }
 
 impl Globals {
@@ -29,6 +31,10 @@ impl Globals {
                 .unwrap_or("localhost")
                 .to_owned(),
             registration_disabled: config.get_bool("registration_disabled").unwrap_or(false),
+            max_request_size: config
+                .get_int("max_request_size")
+                .map(|x| u32::try_from(x).expect("invalid max_request_size"))
+                .unwrap_or(20 * 1024 * 1024 /* 20 MiB */),
         })
     }
 
@@ -66,4 +72,5 @@ impl Globals {
     pub fn registration_disabled(&self) -> bool {
         self.registration_disabled
     }
+    pub fn max_request_size(&self) -> u32 { self.max_request_size }
 }
