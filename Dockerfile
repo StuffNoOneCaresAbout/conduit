@@ -9,7 +9,7 @@ FROM alpine:3.12 as builder
 
 # Specifies if the local project is build or if Conduit gets build
 # from the official git repository. Defaults to the git repo.
-ARG LOCAL=false
+ARG LOCAL=true
 # Specifies which revision/commit is build. Defaults to HEAD
 ARG GIT_REF=HEAD
 
@@ -30,7 +30,7 @@ COPY . .
 RUN if [[ $LOCAL == "true" ]]; then \
         cargo install --path . ; \
     else \
-        cargo install --git "https://git.koesters.xyz/timo/conduit.git" \
+        cargo install --git "https://git.koesters.xyz/timo/conduit.git" ; \
     fi
 
 ########################## RUNTIME IMAGE ##########################
