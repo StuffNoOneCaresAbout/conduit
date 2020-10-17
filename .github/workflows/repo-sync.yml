@@ -2,7 +2,7 @@ name: Repo Sync
 
 on:
   schedule: 
-  - cron: "* * * * *"
+  - cron: "0 * * * *"
 
 jobs:
   repo-sync:
