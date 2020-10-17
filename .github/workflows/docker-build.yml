@@ -5,7 +5,7 @@ on:
     paths-ignore:
       - "**.md"
     branches:
-      - sync
+      - master
 
 jobs:
   build-docker:
