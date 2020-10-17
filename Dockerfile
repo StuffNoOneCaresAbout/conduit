@@ -30,7 +30,7 @@ COPY . .
 RUN if [[ $LOCAL == "true" ]]; then \
         cargo install --path . ; \
     else \
-        cargo install --git "https://git.koesters.xyz/timo/conduit.git" --rev ${GIT_REF}; \
+        cargo install --git "https://git.koesters.xyz/timo/conduit.git" \
     fi
 
 ########################## RUNTIME IMAGE ##########################
